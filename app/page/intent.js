@@ -1,0 +1,1 @@
+export function intent(sources) {}
