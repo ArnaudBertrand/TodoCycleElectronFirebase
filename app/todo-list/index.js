@@ -2,25 +2,24 @@ import {Todo} from '../todo';
 import {intent} from './intent';
 import {model} from './model';
 import {view} from './view';
+import {h1} from '@cycle/dom';
 
-function proxyCycleFire(CycleFire, actions$) {
-  const {add$, remove$} = actions$;
+function proxyCycleFire(CycleFire, actions) {
+  const {add$, remove$} = actions;
 
-  add$.map(text => {
-    console.log(text);
-
-    const id = Date.now();
+  add$.subscribe(text => {
     const todo = {
-      id: id,
-      complete: false,
-      text: text
+      date: Date.now(),
+      text,
+      done: false
     };
 
-    CycleFire.child('todos').child(id).set(todo);
+    CycleFire.child('todos').push(todo);
   });
 
-  remove$.map(id => {
-    CycleFire.child('todos').child(id).remove();
+  remove$.subscribe(id => {
+    console.log(id);
+    //CycleFire.child('todos').child(id).remove();
   });
 
   return {
@@ -29,15 +28,16 @@ function proxyCycleFire(CycleFire, actions$) {
   };
 }
 
-export function TodoList(sources) {
-  const actions$ = intent(sources.DOM);
+export function TodoList({DOM, CycleFire}) {
+  const actions = intent({DOM});
 
-  actions$.add$.map((x) => { console.log(x); });
-  actions$.remove$.map((x) => { console.log(x); });
+  actions.remove$.subscribe((x) => {
+    console.log(x);
+  });
 
-  const amendedActions$ = proxyCycleFire(sources.CycleFire, actions$);
+  const amendedActions = proxyCycleFire(CycleFire, actions);
 
-  const state$ = model(amendedActions$);
+  const state$ = model(amendedActions);
 
   const vtree$ = view(state$);
 

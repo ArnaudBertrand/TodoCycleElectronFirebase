@@ -10,7 +10,7 @@ export function model(actions) {
 
   const remove$ = actions.remove$
       .map(todo => function (state){
-        state.remove(todo.id);
+        state.remove(todo);
         return state;
       });
 

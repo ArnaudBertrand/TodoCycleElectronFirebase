@@ -1,8 +1,11 @@
 import TodosState from '../states/todos';
 
-export function intent(DOM) {
+const ENTER_KEYCODE = 13;
+
+export function intent({DOM}) {
   const add$ = DOM.select('.new')
-      .events('change')
+      .events('keydown')
+      .filter(({keyCode}) => keyCode === ENTER_KEYCODE)
       .map(e => e.target.value)
       .filter(text => text.trim());
 
@@ -12,6 +15,6 @@ export function intent(DOM) {
 
   return {
     add$,
-    remove$
+    remove$,
   };
 }

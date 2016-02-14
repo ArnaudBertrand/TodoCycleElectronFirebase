@@ -4,7 +4,7 @@ import Firebase from 'firebase';
 Firebase.prototype.__proto__.observe = function(eventName) {
   return Observable.create((observer) => {
     this.on(eventName, (data) => {
-      observer.onNext(data.val());
+      observer.onNext(data);
     });
   }).doOnError(
       function (err) { console.log('Do Error: ' + err); }

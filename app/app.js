@@ -2,11 +2,14 @@ import {run} from '@cycle/core';
 import {makeDOMDriver} from '@cycle/dom';
 import {makeCycleFireDriver} from './driver/firebase';
 
-import * as Page from './page';
+import {Page} from './page';
 
 function main(sources) {
+
+  let page = Page(sources);
+
   return {
-    DOM: Page.view(sources)
+    DOM: page.DOM
   };
 }
 

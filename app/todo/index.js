@@ -3,6 +3,7 @@ import {model} from './model';
 import {view} from './view';
 
 export function Todo(sources) {
+  console.log('test');
   const actions$ = intent(sources);
 
   const state$ = model(actions$, props);
@@ -11,6 +12,6 @@ export function Todo(sources) {
 
   return {
     DOM: vtree$,
-    actions.remove$,
+    remove$: actions$.remove$,
   }
 }
