@@ -8,6 +8,18 @@ export function model(actions) {
         return state;
       });
 
+  const change$ = actions.change$
+      .map(todo => function (state){
+        state.change(todo);
+        return state;
+      });
+
+  const move$ = actions.move$
+      .map(todo => function (state){
+        state.move(todo);
+        return state;
+      });
+
   const remove$ = actions.remove$
       .map(todo => function (state){
         state.remove(todo);
@@ -16,6 +28,8 @@ export function model(actions) {
 
   return Observable.merge(
       add$,
+      change$,
+      move$,
       remove$
   )
     .startWith(new TodosState())

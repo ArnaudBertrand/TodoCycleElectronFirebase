@@ -5,7 +5,7 @@ import {view} from './view';
 import {h1} from '@cycle/dom';
 
 function proxyCycleFire(CycleFire, actions) {
-  const {add$, remove$} = actions;
+  const {add$, toggle$, remove$} = actions;
 
   add$.subscribe(text => {
     const todo = {
@@ -17,23 +17,24 @@ function proxyCycleFire(CycleFire, actions) {
     CycleFire.child('todos').push(todo);
   });
 
+  toggle$.subscribe(todo => {
+    CycleFire.child('todos').child(todo.id).child('done').set(!todo.checked);
+  });
+
   remove$.subscribe(id => {
-    console.log(id);
-    //CycleFire.child('todos').child(id).remove();
+    CycleFire.child('todos').child(id).remove();
   });
 
   return {
-    add$: CycleFire.child('todos').observe('child_added'),
-    remove$: CycleFire.child('todos').observe('child_removed')
+    add$:     CycleFire.child('todos').observe('child_added'),
+    change$:  CycleFire.child('todos').observe('child_changed'),
+    move$:   CycleFire.child('todos').observe('child_moved'),
+    remove$:  CycleFire.child('todos').observe('child_removed')
   };
 }
 
 export function TodoList({DOM, CycleFire}) {
   const actions = intent({DOM});
-
-  actions.remove$.subscribe((x) => {
-    console.log(x);
-  });
 
   const amendedActions = proxyCycleFire(CycleFire, actions);
 

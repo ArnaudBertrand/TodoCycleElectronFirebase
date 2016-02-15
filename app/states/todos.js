@@ -10,6 +10,19 @@ export default class {
     this._todos.push(todo);
   }
 
+  change(todo) {
+    for(let i = 0; i < this._todos.length ; i++){
+      if(this._todos[i].key() === todo.key()){
+        return this._todos[i] = todo;
+      }
+    }
+  }
+
+  move(todo) {
+    console.log('move');
+    console.log(todo);
+  }
+
   remove(todo) {
     // Find the task according to its key and remove it
     this._todos = this._todos.filter((arrTodo) => {
@@ -19,9 +32,9 @@ export default class {
 
   getAll() {
     // Map the todos with their values and add an id to recognize them
-    return this._todos.map((todo, id) => {
+    return this._todos.map((todo) => {
       const todoWithId = todo.val();
-      todoWithId.id = id;
+      todoWithId.id = todo.key();
       return todoWithId;
     });
   }
